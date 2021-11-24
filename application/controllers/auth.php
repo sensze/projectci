@@ -3,11 +3,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class auth extends CI_Controller
 {
+    //Constructor
     public function __construct()
     {
         parent::__construct();
         $this->load->library('form_validation');
     }
+    //Login page lek gasalah wkwk
     public function index()
     {
         $this->form_validation->set_rules('nrp', 'Nrp', 'trim|required');
@@ -19,6 +21,7 @@ class auth extends CI_Controller
             $this->load->view('templates/auth_footer');
         }
     }
+    //Registration
     public function registration()
     {
         //Validation
