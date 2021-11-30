@@ -111,12 +111,16 @@ class auth extends CI_Controller
 
     public function logout()
     {
-        $this->session->unset_userdata('user_email');
+        $this->session->unset_userdata('user_nrp');
         $this->session->unset_userdata('role_id');
 
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
            You have been logged out !
           </div>');
         redirect('auth');
+    }
+    public function blocked()
+    {
+        $this->load->view('auth/blocked');
     }
 }
