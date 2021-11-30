@@ -19,6 +19,53 @@ class auth extends CI_Controller
             $this->load->view('templates/auth_header', $data);
             $this->load->view('auth/login.php');
             $this->load->view('templates/auth_footer');
+        } else {
+            //validasi success
+            $this->_login();
+        }
+    }
+
+    //login 
+    private function _login()
+    {
+        $nrp = $this->input->post('nrp');
+        $password = $this->input->post('password');
+
+        $user = $this->db->get_where('user_table', ['user_nrp' => $nrp])->row_array();
+
+        //user ada
+        if ($user) {
+            //jika user aktif
+            if ($user['is_active'] == 1) {
+                if (password_verify($password, $user['user_password'])) {
+                    $data = [
+                        'nrp' => $user['user_nrp'],
+                        'role_id' => $user['role_id']
+                    ];
+                    $this->session->set_userdata($data);
+                    if ($user['role_id'] == 1) {
+                        redirect('admin');
+                    } else {
+                        redirect('user');
+                    }
+                } else {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                Wrong password !
+               </div>');
+                    redirect('auth');
+                }
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                This NRP has not been activated ! Contact your administrator !
+               </div>');
+                redirect('auth');
+            }
+        } else {
+            //tidak ada user dengan email itu
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+            NRP is not registered !
+           </div>');
+            redirect('auth');
         }
     }
     //Registration
@@ -49,7 +96,7 @@ class auth extends CI_Controller
                 'user_email' => htmlspecialchars($this->input->post('email', true)),
                 'user_nrp' => htmlspecialchars($this->input->post('nrp', true)),
                 'user_image' => 'default.jpg',
-                'user_password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
+                'user_password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
                 'role_id' => 2,
                 'is_active' => 1,
                 'date_created' => time()
@@ -58,7 +105,18 @@ class auth extends CI_Controller
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
            Congratulation ! Your account has been created ! Please Login
           </div>');
-            redirect('auth/login.php');
+            redirect('auth');
         }
+    }
+
+    public function logout()
+    {
+        $this->session->unset_userdata('user_email');
+        $this->session->unset_userdata('role_id');
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+           You have been logged out !
+          </div>');
+        redirect('auth');
     }
 }

@@ -14,10 +14,11 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Login Page</h1>
                                     </div>
+
                                     <?= $this->session->flashdata('message'); ?>
                                     <form class="user" method="post" action="<?= base_url('auth'); ?>">
                                         <div class="form-group">
-                                            <input type="text" class="form-control form-control-user" id="nrp" name="nrp" placeholder="Enter NRP">
+                                            <input type="text" class="form-control form-control-user" id="nrp" name="nrp" placeholder="Enter NRP" value="<?= set_value('nrp') ?>">
                                             <?= form_error('nrp', '<small class="text-danger">', '</small>') ?>
                                         </div>
                                         <div class="form-group">
