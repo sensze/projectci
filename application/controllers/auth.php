@@ -131,7 +131,7 @@ class auth extends CI_Controller
             'protocol'  => 'smtp',
             'smtp_host' => 'smtp.gmail.com',
             'smtp_user' => 'simpmkp.ver@gmail.com',  // Email gmail
-            'smtp_pass' => 'simpmkpversurabaya',  // Password gmail
+            'smtp_pass' => '',  // Password gmail CONTACT ME !
             'smtp_port' => 465,
             'newline' => "\r\n"
         ];
